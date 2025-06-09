@@ -1,0 +1,40 @@
+services:
+  postgres_catalogue:
+    image: postgres:15
+    container_name: postgres_catalogue_container
+    environment:
+      POSTGRES_DB: db_catalogue
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata_catalogue:/var/lib/postgresql/data
+
+  postgres_payments:
+    image: postgres:15
+    container_name: postgres_payments_container
+    environment:
+      POSTGRES_DB: db_payments
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata_payments:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@relatos.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres_catalogue
+      - postgres_payments
+
+volumes:
+  pgdata_catalogue:
+  pgdata_payments:
