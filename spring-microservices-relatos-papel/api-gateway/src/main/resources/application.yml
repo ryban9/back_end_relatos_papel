@@ -18,6 +18,11 @@ spring:
           predicates:
             - Path=/api/books/**
 
+        - id: books-payments
+          uri: lb://ms-books-payments
+          predicates:
+            - Path=/api/purchases/**
+
 eureka:
   client:
     service-url:

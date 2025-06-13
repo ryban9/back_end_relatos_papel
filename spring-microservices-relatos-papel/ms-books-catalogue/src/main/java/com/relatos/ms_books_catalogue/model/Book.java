@@ -36,4 +36,7 @@ public class Book {
 
     @Column(nullable = false)
     private Boolean visible;
+
+    @Column(nullable = false)
+    private Integer stock;
 }

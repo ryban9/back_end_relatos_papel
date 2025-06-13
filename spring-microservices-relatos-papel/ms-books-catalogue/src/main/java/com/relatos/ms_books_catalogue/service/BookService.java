@@ -41,6 +41,8 @@ public class BookService {
             spec = spec.and(BookSpecification.isVisible(criteria.getVisible()));
         if (criteria.getPublishedAfter() != null)
             spec = spec.and(BookSpecification.publishedAfter(criteria.getPublishedAfter()));
+        if (criteria.getStock() != null)
+            spec = spec.and(BookSpecification.hasStock(criteria.getStock()));
 
         return repository.findAll(spec);
     }
@@ -73,6 +75,7 @@ public class BookService {
             existing.setRating(book.getRating());
             existing.setVisible(book.getVisible());
             existing.setPublicationDate(book.getPublicationDate());
+            existing.setStock(book.getStock());
             return repository.save(existing);
         });
     }
@@ -129,6 +132,14 @@ public class BookService {
                             existing.setPublicationDate(LocalDate.parse((String) value));
                         }
                         break;
+
+                    case "stock":
+                        Integer stock = convertToInteger(value);
+                        if (stock != null && stock < 0) {
+                            throw new IllegalArgumentException("El stock no puede ser negativo");
+                        }
+                        existing.setStock(stock);
+                        break;
                 }
             });
             validateBook(existing); // Validar el libro después de aplicar cambios parciales
@@ -167,6 +178,9 @@ public class BookService {
         if (book.getRating() != null && (book.getRating() < 1 || book.getRating() > 5)) {
             throw new IllegalArgumentException("La calificación debe estar entre 1 y 5");
         }
+        if (book.getStock() != null && book.getStock() < 0) {
+            throw new IllegalArgumentException("El stock no puede ser negativo");
+        }
     }
 
     /**
@@ -181,6 +195,6 @@ public class BookService {
                 return Integer.parseInt((String) value);
             } catch (NumberFormatException ignored) {}
         }
-        throw new IllegalArgumentException("Valor no válido para calificación");
+        throw new IllegalArgumentException("Valor no válido para calificación o stock");
     }
 }

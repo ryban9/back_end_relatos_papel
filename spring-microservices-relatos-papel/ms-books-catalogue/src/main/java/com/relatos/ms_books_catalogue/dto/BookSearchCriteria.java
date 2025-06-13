@@ -23,4 +23,6 @@ public class BookSearchCriteria {
 
     @PastOrPresent(message = "La fecha no puede ser futura")
     private LocalDate publishedAfter;
+
+    private Integer stock;
 }

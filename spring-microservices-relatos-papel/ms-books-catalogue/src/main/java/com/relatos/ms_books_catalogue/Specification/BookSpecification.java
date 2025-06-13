@@ -40,4 +40,8 @@ public class BookSpecification {
         return (root, query, builder) ->
                 date == null ? null : builder.greaterThanOrEqualTo(root.get("publicationDate"), date);
     }
+
+    public static Specification<Book> hasStock(Integer stock) {
+        return (root, query, cb) -> cb.equal(root.get("stock"), stock);
+    }
 }
